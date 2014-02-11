@@ -239,8 +239,6 @@ Frog.UI = (function(Frog) {
                         icon: Frog.icon('cog'),
                         menu: buildPrefMenu()
                     });
-
-                    
                 }
                 else {
                     addLoginAction();
@@ -252,6 +250,11 @@ Frog.UI = (function(Frog) {
         ToolBar.add({
             icon: Frog.icon('feed'),
             handler: rssHandler
+        });
+        ToolBar.add('-');
+        ToolBar.add({
+            text: 'Logout',
+            handler: logoutHandler
         });
     }
     function addEvent(event, fn) {
@@ -793,6 +796,9 @@ Frog.UI = (function(Frog) {
                 });
             }
         });
+    }
+    function logoutHandler() {
+      location.href = '/frog/logout';
     }
 
     function addLoginAction() {

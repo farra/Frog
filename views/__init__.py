@@ -54,27 +54,31 @@ def index(request):
         return upload(request)
 
 def login_(request):
-    res = Result()
+    # res = Result()
 
-    res.isSuccess = True
-    email = request.POST.get('email', 'noauthor@domain.com').lower()
-    username = email.split('@')[0]
-    first_name = request.POST.get('first_name', 'no').lower()
-    last_name = request.POST.get('last_name', 'author').lower()
+    # res.isSuccess = True
+    # email = request.POST.get('email', 'noauthor@domain.com').lower()
+    # username = email.split('@')[0]
+    # first_name = request.POST.get('first_name', 'no').lower()
+    # last_name = request.POST.get('last_name', 'author').lower()
 
-    user = authenticate(username=username)
-    user.first_name = first_name
-    user.last_name = last_name
-    user.email = email
-    user.save()
+    # user = authenticate(username=username)
+    # user.first_name = first_name
+    # user.last_name = last_name
+    # user.email = email
+    # user.save()
 
-    Tag.objects.get_or_create(name=first_name + ' ' + last_name, defaults={'artist': True})
+    uname  = request.POST.get('username').lower()
+    pwd = request.POST.get('password')
+    user = authenticate(username=uname,password=pwd)
 
-    if user.is_active:
-        login(request, user)
-        return HttpResponseRedirect('/frog/gallery/1')
-    else:
+    if user is None:
         return render(request, 'frog/index.html', {'message': 'User account not active'})
+    else:
+        Tag.objects.get_or_create(name=user.first_name + ' ' + user.last_name, defaults={'artist': True})
+        login(request, user)
+        return HttpResponseRedirect('/frog/gallery/1')        
+
 
 def logout_(request):
     logout(request)
